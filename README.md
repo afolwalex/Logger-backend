@@ -9,7 +9,7 @@ You don't need to display this on a browser. Just get it running with the follow
 
 * Clone this repo.
 * Run `npm install` to install all the neccessary dependencies.
-* Fun `npm run devstart` to keep it running.
+* Run `npm run devstart` to keep it running.
 * Incase you want to test with postman, the port is 3800.
 
 ## Contributors
