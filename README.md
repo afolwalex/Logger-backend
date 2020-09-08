@@ -17,12 +17,12 @@ If you want to contribute to this project, please send an email to olawaleisaac9
 
 ## Current Functionalites
 This API will do more, but for now, here are what it does.
-..* Accepts user details and store it in a database.
-..* Authenticate user using JWT.
-..* Allow user to change password if forgotten.
-..* Refreshes token if need be.
-..* Revoke token.
-..* Option of sending email during registration.
+* Accepts user details and store it in a database.
+* Authenticate user using JWT.
+* Allow user to change password if forgotten.
+* Refreshes token if need be.
+* Revoke token.
+* Option of sending email during registration.
 
 You can check out the frontend to this API on this github account. Logger-frontend is the name.
 
