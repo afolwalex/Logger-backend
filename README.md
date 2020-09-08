@@ -7,10 +7,10 @@ This work is still under development. It will be hosted live soon, but if you wi
 ## Getting Started
 You don't need to display this on a browser. Just get it running with the following steps.
 
-..* Clone this repo.
-..* Run `npm install` to install all the neccessary dependencies.
-..* Fun `npm run devstart` to keep it running.
-..* Incase you want to test with postman, the port is 3800.
+* Clone this repo.
+* Run `npm install` to install all the neccessary dependencies.
+* Fun `npm run devstart` to keep it running.
+* Incase you want to test with postman, the port is 3800.
 
 ## Contributors
 If you want to contribute to this project, please send an email to olawaleisaac9@gmail.com.
