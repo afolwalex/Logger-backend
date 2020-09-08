@@ -3,7 +3,7 @@ const router = express.Router();
 const isAuthenticated = require('../jwt') 
 
 const UserController = require('../controller/user_controller')
- 
+
 router.post('/account/register', UserController.registerUsers)
 router.post('/account/verify-email', UserController.verifyEmail)
 router.post('/account/forgot-password', UserController.forgotPassword)

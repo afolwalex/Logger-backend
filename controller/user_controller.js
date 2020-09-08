@@ -57,48 +57,43 @@ class App{
                     password : userPass,
                     email     : email , 
                     mobile    : mobile, 
-                    picture : picture,
                     address : {
                         contactAddress : contactAddress,
                         state : state,
                         country : country
                     },
                     role : 'User', 
-                    dateOfBirth : gender,
+                    gender : gender,
                     verificationToken : crypto.randomBytes(40).toString('hex') 		
                 })
                 let savedUser = await createUser.save() 
                 if (savedUser) {
-        
-                    const mailOption = ({
-                        to   : savedUser.email , 
-                        subject : 'Registration Successful' , 
-                        html  : sendVerifyMessage(req.get('host'), savedUser) 
-                    })
-                    transport.sendMail(mailOption , (err , msg) => {
-                        if ( err ) {
-                            console.log(err)
-                            res.json({message : "Unable to send mail."})
-                            return
-                        }else {
-                            res.json({message : "Your account has been created. Please verify your email to login."})
-                            return
-                        }
-                    })
+                    res.json({message : "Your account has been created. Please verify your email to login."})
+                    return
+                    // const mailOption = ({
+                    //     to   : savedUser.email , 
+                    //     subject : 'Registration Successful' , 
+                    //     html  : sendVerifyMessage(req.get('host'), savedUser) 
+                    // })
+                    // transport.sendMail(mailOption , (err , msg) => {
+                    //     if ( err ) {
+                    //         console.log(err)
+                    //         res.json({message : "Unable to send mail."})
+                    //         return
+                    //     }else {
+                    //         res.json({message : "Your account has been created. Please verify your email to login."})
+                    //         return
+                    //     }
+                    // })
             
                 }else{
-                    throw{
-                        message : "There is a problem with your network settings."
-                    }
+                    throw new Error('There is a problem with your network settings.')
                 }
             }else{
-                throw{
-                    message : "You have an account created already. Please, proceed to login."
-                }
+                throw new Error('You have an account created already. Please, proceed to login.')
             }
         }catch(error){
-            res.json({message: error.message})
-            return
+            next(error)
         }
     }
 
@@ -220,7 +215,8 @@ class App{
     authenticate = async (req, res, next) => {
         try{
             const {email, password} = req.body
-            const findUser = await User.findOne({email: email, verified: true})
+            const findUser = await User.findOne({email: email})
+           
             if(findUser){
                 let validUser = await bcrypt.compare(password , findUser.password)
                 if(validUser){
@@ -256,24 +252,21 @@ class App{
                         };
     
                         res.cookie('refreshToken', saveRefreshToken.token, cookieOptions);
-                       
+                        
                         res.json({
                             ...findUser.toObject(), 
                             jwtToken:token
                         })
+
                     })
                 }else{
-                    throw{
-                        message: "Email or Password is incorrect."
-                    } 
+                    throw new Error('Email or Password is Incorrect')
                 }
             }else{
-                throw{
-                    message: "Email or Password is incorrect."
-                } 
+                throw new Error('Email or Password is Incorrect')
             }
         }catch(error){
-            res.json({message : error.message})
+            next(error)
         }
     }
 
@@ -281,8 +274,8 @@ class App{
         try{
             const token = req.cookies.refreshToken
             const findToken = await Refresh.findOne({token: token})
-            const mainUser = await User.findOne({_id : findToken.user})
             if(findToken){
+                const mainUser = await User.findOne({_id : findToken.user})
                 let newRefreshToken = await new Refresh({
                     user  : findToken.user, 
                     token  : crypto.randomBytes(40).toString('hex') , 
@@ -328,14 +321,16 @@ class App{
                             })
                         })
                     }else{
-                        res.json({message: "Unable to update token changes."})
+                        console.log('Unable to update token changes.')
+                        throw new Error('Unable to update token changes.')
                     }
                 }
             }else{
-                res.json({message: "Invalid Token"})
+                console.log('Invalid Token')
+                throw new Error('Invalid Token')
             }
         }catch(error){
-            res.json({message: error})
+            next(error)
         }
     }
 
@@ -367,7 +362,7 @@ class App{
                     res.json({message: "Token has been revoked."})
                 }
             }else{
-                res.json({message: "Invalid Token"})
+                throw new Error('Invalid Token')
             }
         }catch(error){
             res.json({message: error})

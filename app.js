@@ -15,6 +15,8 @@ const cookieParser = require('cookie-parser');
 const appRouter = require('./routes/index') 
 const app = express()
 
+const errorHandler = require('./controller/error_handler')
+
 /** 
  * A middleware is a function that works over an http request 
  * To use a middleware in express application  , write it as :
@@ -30,9 +32,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', appRouter)
-app.get("/*" , (req , res) => {
-	res.sendFile(path.join(__dirname , "public" , "index.html"))
-})
+// app.get("/*" , (req , res) => {
+// 	res.sendFile(path.join(__dirname , "public" , "index.html"))
+// })
+app.use(errorHandler)
 /**
  * Connect to the database and listen to error and open event 
  */
